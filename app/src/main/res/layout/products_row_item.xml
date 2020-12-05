@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/prod_image"
+        android:id="@+id/const_layout"
         android:layout_width="250dp"
         android:layout_height="500dp"
         android:adjustViewBounds="true"
@@ -36,8 +36,8 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/rubik_medium"
         android:text="Size"
-        app:layout_constraintStart_toStartOf="@+id/prod_name"
-        app:layout_constraintTop_toBottomOf="@+id/prod_name" />
+        app:layout_constraintStart_toStartOf="@+id/layout_prod"
+        app:layout_constraintTop_toBottomOf="@+id/layout_prod" />
 
     <TextView
         android:id="@+id/textView9"
@@ -80,7 +80,7 @@
         app:layout_constraintTop_toTopOf="@+id/prod_qty" />
 
     <TextView
-        android:id="@+id/prod_name"
+        android:id="@+id/layout_prod"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

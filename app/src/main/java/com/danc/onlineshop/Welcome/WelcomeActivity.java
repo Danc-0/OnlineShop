@@ -23,6 +23,6 @@ public class WelcomeActivity extends AppCompatActivity {
             public void run() {
                 startActivity(intent);
             }
-        }, 1000);
+        }, 100);
     }
 }

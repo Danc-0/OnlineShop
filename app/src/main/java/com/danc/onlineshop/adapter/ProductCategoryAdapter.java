@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +47,7 @@ public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategory
     }
 
 
-    public static final class ProductViewHolder extends RecyclerView.ViewHolder{
+    public static final class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
         TextView catagoryName;
@@ -56,6 +57,16 @@ public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategory
 
             catagoryName = itemView.findViewById(R.id.cat_name);
 
+            itemView.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(v.getContext(), "Item Clicked " + itemView.getId(), Toast.LENGTH_SHORT).show();
+            switch (v.getId()){
+//                case
+            }
         }
     }
 

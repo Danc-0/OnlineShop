@@ -2,6 +2,7 @@ package com.danc.onlineshop.model;
 
 public class AlcoholItemModel {
 
+    private String id;
     private String category;
     private String name;
     private String price;
@@ -9,8 +10,12 @@ public class AlcoholItemModel {
     private String size;
     private String imageUrl;
 
+    public AlcoholItemModel(){
 
-    public AlcoholItemModel(String category, String name, String price, String description, String size, String imageUrl) {
+    }
+
+    public AlcoholItemModel(String id, String category, String name, String price, String description, String size, String imageUrl) {
+        this.id = id;
         this.category = category;
         this.name = name;
         this.price = price;
@@ -65,5 +70,13 @@ public class AlcoholItemModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

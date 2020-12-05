@@ -1,39 +1,62 @@
 package com.danc.onlineshop;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-
+import com.danc.onlineshop.adapter.CategoryItemAdapter;
 import com.danc.onlineshop.adapter.ProductAdapter;
 import com.danc.onlineshop.adapter.ProductCategoryAdapter;
+import com.danc.onlineshop.adapter.SingleProductAdapter;
+import com.danc.onlineshop.model.AlcoholItemModel;
 import com.danc.onlineshop.model.ProductCategory;
 import com.danc.onlineshop.model.Products;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     ProductCategoryAdapter productCategoryAdapter;
     RecyclerView productCatRecycler, prodItemRecycler;
     ProductAdapter productAdapter;
+    private ListView mListView;
+    List<AlcoholItemModel> alcoholItemModels = new ArrayList<>();
+    List<String> itemCategory = new ArrayList<>();
+    AlcoholItemModel alcoholItemModel;
+    CategoryItemAdapter categoryItemAdapter;
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mDatabaseReference;
+
+    List<ProductCategory> productCategoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<ProductCategory> productCategoryList = new ArrayList<>();
-        productCategoryList.add(new ProductCategory(1, "Trending"));
-        productCategoryList.add(new ProductCategory(2, "Most Popular"));
-        productCategoryList.add(new ProductCategory(3, "All Body Products"));
-        productCategoryList.add(new ProductCategory(4, "Skin Care"));
-        productCategoryList.add(new ProductCategory(5, "Hair Care"));
-        productCategoryList.add(new ProductCategory(6, "Make Up"));
-        productCategoryList.add(new ProductCategory(7, "Fragrance"));
+//        mFirebaseDatabase = FirebaseDatabase.getInstance();
+//        mDatabaseReference = mFirebaseDatabase.getReference().child("Alcohol").child("Category");
 
+//        List<String> productCategoryList = new ArrayList<>();
+        productCategoryList = new ArrayList<>();
+        productCategoryList.add(new ProductCategory(1, "Whisky"));
+        productCategoryList.add(new ProductCategory(2, "Wine"));
+        productCategoryList.add(new ProductCategory(3, "Beer"));
+        productCategoryList.add(new ProductCategory(4, "Brandy"));
+        productCategoryList.add(new ProductCategory(5, "Vodka"));
+        productCategoryList.add(new ProductCategory(6, "Soft Drinks"));
+        productCategoryList.add(new ProductCategory(7, "Fragrance"));
+//
         setProductRecycler(productCategoryList);
 
         List<Products> productsList = new ArrayList<>();
@@ -46,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
         setProdItemRecycler(productsList);
 
+        listAlcoholItems();
+
+
     }
 
     private void setProductRecycler(List<ProductCategory> productCategoryList){
@@ -54,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         productCatRecycler.setLayoutManager(layoutManager);
         productCategoryAdapter = new ProductCategoryAdapter(this, productCategoryList);
+        CategoryItemAdapter adapter = new CategoryItemAdapter(this, itemCategory);
         productCatRecycler.setAdapter(productCategoryAdapter);
+
 
     }
 
@@ -64,9 +92,30 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         prodItemRecycler.setLayoutManager(layoutManager);
         productAdapter = new ProductAdapter(this, productsList);
-        prodItemRecycler.setAdapter(productAdapter);
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                SingleProductAdapter adapter = new SingleProductAdapter(MainActivity.this, alcoholItemModels);
+                prodItemRecycler.setAdapter(adapter);
+            }
+        });
+
+
+//        prodItemRecycler.setAdapter(productAdapter);
 
     }
+
+    private void listAlcoholItems(){
+        mListView = findViewById(R.id.alcohol_items);
+        String[] mobileArray = {"Wine","Whiskey",
+                "Beer","Vodka",""};
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_layout, R.id.textView3, mobileArray);
+        productCatRecycler.setAdapter(productCategoryAdapter);
+        mListView.setAdapter(adapter);
+    }
+
 
     // Hi all today we are going to make a online product selling app.
     // basically its a cosmatic selling app.
