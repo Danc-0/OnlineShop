@@ -2,9 +2,12 @@ package com.danc.onlineshop;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +17,10 @@ import com.danc.onlineshop.adapter.CategoryItemAdapter;
 import com.danc.onlineshop.adapter.ProductAdapter;
 import com.danc.onlineshop.adapter.ProductCategoryAdapter;
 import com.danc.onlineshop.adapter.SingleProductAdapter;
+import com.danc.onlineshop.adapter.listItemsAdapters.BeerAdapter;
+import com.danc.onlineshop.adapter.listItemsAdapters.VodkaAdapter;
+import com.danc.onlineshop.adapter.listItemsAdapters.WhiskeyAdapter;
+import com.danc.onlineshop.adapter.listItemsAdapters.WineAdapter;
 import com.danc.onlineshop.model.AlcoholItemModel;
 import com.danc.onlineshop.model.ProductCategory;
 import com.danc.onlineshop.model.Products;
@@ -44,10 +51,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        mFirebaseDatabase = FirebaseDatabase.getInstance();
-//        mDatabaseReference = mFirebaseDatabase.getReference().child("Alcohol").child("Category");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference();
 
-//        List<String> productCategoryList = new ArrayList<>();
+        prodItemRecycler = findViewById(R.id.product_recycler);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this, RecyclerView.HORIZONTAL, false);
+        prodItemRecycler.setLayoutManager(layoutManager);
+
+        sampleData();
+        listAlcoholItems();
+
+
+    }
+
+    private void sampleData() {
+        //        List<String> productCategoryList = new ArrayList<>();
         productCategoryList = new ArrayList<>();
         productCategoryList.add(new ProductCategory(1, "Whisky"));
         productCategoryList.add(new ProductCategory(2, "Wine"));
@@ -58,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         productCategoryList.add(new ProductCategory(7, "Fragrance"));
 //
         setProductRecycler(productCategoryList);
-
         List<Products> productsList = new ArrayList<>();
         productsList.add(new Products(1, "Japanese Cherry Blossom", "250 ml", "$ 17.00", R.drawable.prod2));
         productsList.add(new Products(2, "African Mango Shower Gel", "350 ml", "$ 25.00", R.drawable.prod1));
@@ -68,30 +85,28 @@ public class MainActivity extends AppCompatActivity {
         productsList.add(new Products(2, "African Mango Shower Gel", "350 ml", "$ 25.00", R.drawable.prod1));
 
         setProdItemRecycler(productsList);
-
-        listAlcoholItems();
-
-
     }
 
-    private void setProductRecycler(List<ProductCategory> productCategoryList){
+    private void setProductRecycler(List<ProductCategory> productCategoryList) {
 
         productCatRecycler = findViewById(R.id.cat_recycler);
-        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         productCatRecycler.setLayoutManager(layoutManager);
         productCategoryAdapter = new ProductCategoryAdapter(this, productCategoryList);
         CategoryItemAdapter adapter = new CategoryItemAdapter(this, itemCategory);
-        productCatRecycler.setAdapter(productCategoryAdapter);
+        productCatRecycler.setAdapter(adapter);
+//        productCatRecycler.setAdapter(productCategoryAdapter);
 
 
     }
 
-    private void setProdItemRecycler(List<Products> productsList){
+    private void setProdItemRecycler(List<Products> productsList) {
 
         prodItemRecycler = findViewById(R.id.product_recycler);
-        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         prodItemRecycler.setLayoutManager(layoutManager);
         productAdapter = new ProductAdapter(this, productsList);
+//        prodItemRecycler.setAdapter(productAdapter);
 
         new Handler().post(new Runnable() {
             @Override
@@ -100,20 +115,69 @@ public class MainActivity extends AppCompatActivity {
                 prodItemRecycler.setAdapter(adapter);
             }
         });
-
-
-//        prodItemRecycler.setAdapter(productAdapter);
-
     }
 
-    private void listAlcoholItems(){
+    private void listAlcoholItems() {
         mListView = findViewById(R.id.alcohol_items);
-        String[] mobileArray = {"Wine","Whiskey",
-                "Beer","Vodka",""};
+        String[] mobileArray = {"Wine", "Whiskey", "Beer", "Vodka"};
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_layout, R.id.textView3, mobileArray);
+        final ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_layout, R.id.textView3, mobileArray);
         productCatRecycler.setAdapter(productCategoryAdapter);
         mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                WineAdapter adapter = new WineAdapter(MainActivity.this, alcoholItemModels);
+                                prodItemRecycler.setAdapter(adapter);
+                            }
+                        });
+                        Toast.makeText(MainActivity.this, "Hello World 0 " + adapter.getPosition(position), Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 1:
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                WhiskeyAdapter adapter = new WhiskeyAdapter(MainActivity.this, alcoholItemModels);
+                                prodItemRecycler.setAdapter(adapter);
+                            }
+                        });
+                        Toast.makeText(MainActivity.this, "Hello World 1 " + adapter.getPosition(position), Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 2:
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                BeerAdapter adapter = new BeerAdapter(MainActivity.this, alcoholItemModels);
+                                prodItemRecycler.setAdapter(adapter);
+                            }
+                        });
+                        Toast.makeText(MainActivity.this, "Hello World 2" + adapter.getPosition(position), Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 3:
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                VodkaAdapter adapter = new VodkaAdapter(MainActivity.this, alcoholItemModels);
+                                prodItemRecycler.setAdapter(adapter);
+                            }
+                        });
+                        Toast.makeText(MainActivity.this, "Hello World 3" + adapter.getPosition(position), Toast.LENGTH_SHORT).show();
+                        break;
+
+                    default:
+                        return;
+                }
+            }
+        });
     }
 
 
@@ -143,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
     // So this tutorial has been completed if you love my work plz like share and subscribe
     // and dont forget to comments
     // see you in the next video
-
 
 
 }

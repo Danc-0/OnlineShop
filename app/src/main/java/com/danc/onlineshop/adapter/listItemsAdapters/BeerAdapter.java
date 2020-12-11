@@ -1,7 +1,6 @@
-package com.danc.onlineshop.adapter;
+package com.danc.onlineshop.adapter.listItemsAdapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleProductAdapter extends RecyclerView.Adapter<SingleProductAdapter.SingleProductViewHolder> {
+public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.VodkaViewHolder> {
     private static final String TAG = "SingleProductAdapter";
     Context context;
     List<AlcoholItemModel> alcoholItemModels = new ArrayList<>();
@@ -32,12 +31,12 @@ public class SingleProductAdapter extends RecyclerView.Adapter<SingleProductAdap
     DatabaseReference mDatabaseReference;
     ChildEventListener mChildEventListener;
 
-    public SingleProductAdapter(Context context, final List<AlcoholItemModel> alcoholItemModels){
+    public BeerAdapter(Context context, final List<AlcoholItemModel> alcoholItemModels) {
         this.context = context;
         this.alcoholItemModels = alcoholItemModels;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = FirebaseUtil.getDatabaseReference().child("Category").child("Wine");
+        mDatabaseReference = FirebaseUtil.getDatabaseReference().child("Category").child("Beer");
 
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -74,14 +73,14 @@ public class SingleProductAdapter extends RecyclerView.Adapter<SingleProductAdap
 
     @NonNull
     @Override
-    public SingleProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public VodkaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.sample_product_design, parent, false);
-        return new SingleProductViewHolder(view);
+        return new VodkaViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SingleProductViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VodkaViewHolder holder, int position) {
         AlcoholItemModel alcoholItemModel = alcoholItemModels.get(position);
         holder.bindData(alcoholItemModel);
     }
@@ -91,12 +90,12 @@ public class SingleProductAdapter extends RecyclerView.Adapter<SingleProductAdap
         return alcoholItemModels.size();
     }
 
-    public static class SingleProductViewHolder extends RecyclerView.ViewHolder {
+    public static class VodkaViewHolder extends RecyclerView.ViewHolder {
 
         ImageView productImage, favouriteImage;
         TextView prodQuantity, prodPrice, prodTitle;
 
-        public SingleProductViewHolder(@NonNull View itemView) {
+        public VodkaViewHolder(@NonNull View itemView) {
             super(itemView);
 
             productImage = itemView.findViewById(R.id.prod_image);
@@ -106,7 +105,7 @@ public class SingleProductAdapter extends RecyclerView.Adapter<SingleProductAdap
             prodTitle = itemView.findViewById(R.id.prod_name);
         }
 
-        public void bindData(AlcoholItemModel alcoholItemModel){
+        public void bindData(AlcoholItemModel alcoholItemModel) {
             prodQuantity.setText(alcoholItemModel.getSize());
             prodPrice.setText(alcoholItemModel.getPrice());
             prodTitle.setText(alcoholItemModel.getName());
